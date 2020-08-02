@@ -30,7 +30,7 @@ namespace ArcCrudAPI
         {
             services.AddDbContext<ArcDBContext>(item => item.UseSqlServer
                                            (Configuration.GetConnectionString("ArcDBConnection")));
-            services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<IItemRepository, ItemRepository>();
             services.AddCors(option => option.AddPolicy("ArcPolicy", builder => {
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 

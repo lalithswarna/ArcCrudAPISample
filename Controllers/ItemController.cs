@@ -11,27 +11,27 @@ namespace ArcCrudAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class ItemController : ControllerBase
     {
-        IPostRepository postRepository;
-        public PostController(IPostRepository _postRepository)
+        IItemRepository postRepository;
+        public ItemController(IItemRepository _postRepository)
         {
             postRepository = _postRepository;
         }
 
         [HttpGet]
-        [Route("GetCategories")]
-        public async Task<IActionResult> GetCategories()
+        [Route("GetItems")]
+        public async Task<IActionResult> GetItems()
         {
             try
             {
-                var categories = await postRepository.GetCategories();
-                if (categories == null)
+                var items = await postRepository.GetArcItems();
+                if (items == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(categories);
+                return Ok(items);
             }
             catch (Exception)
             {
@@ -40,45 +40,26 @@ namespace ArcCrudAPI.Controllers
 
         }
 
-        [HttpGet]
-        [Route("GetPosts")]
-        public async Task<IActionResult> GetPosts()
-        {
-            try
-            {
-                var posts = await postRepository.GetPosts();
-                if (posts == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(posts);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
 
         [HttpGet]
-        [Route("GetPost")]
-        public async Task<IActionResult> GetPost(int? postId)
+        [Route("GetItem")]
+        public async Task<IActionResult> GetItem(int? itemID)
         {
-            if (postId == null)
+            if (itemID == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                var post = await postRepository.GetPost(postId);
+                var arcItem = await postRepository.GetItem(itemID);
 
-                if (post == null)
+                if (arcItem == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(post);
+                return Ok(arcItem);
             }
             catch (Exception)
             {
@@ -87,14 +68,14 @@ namespace ArcCrudAPI.Controllers
         }
 
         [HttpPost]
-        [Route("AddPost")]
-        public async Task<IActionResult> AddPost([FromBody] Post model)
+        [Route("AddItem")]
+        public async Task<IActionResult> AddItem([FromBody] ArcItems model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var postId = await postRepository.AddPost(model);
+                    var postId = await postRepository.AddItem(model);
                     if (postId > 0)
                     {
                         return Ok(postId);
@@ -116,19 +97,19 @@ namespace ArcCrudAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("DeletePost")]
-        public async Task<IActionResult> DeletePost(int? postId)
+        [Route("DeleteItem")]
+        public async Task<IActionResult> DeletePost(int? itemId)
         {
             int result = 0;
 
-            if (postId == null)
+            if (itemId == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                result = await postRepository.DeletePost(postId);
+                result = await postRepository.DeleteItem(itemId);
                 if (result == 0)
                 {
                     return NotFound();
@@ -144,14 +125,14 @@ namespace ArcCrudAPI.Controllers
 
 
         [HttpPut]
-        [Route("UpdatePost")]
-        public async Task<IActionResult> UpdatePost([FromBody] Post model)
+        [Route("UpdateItem")]
+        public async Task<IActionResult> UpdateItem([FromBody] ArcItems model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await postRepository.UpdatePost(model);
+                    await postRepository.UpdateItem(model);
 
                     return Ok();
                 }

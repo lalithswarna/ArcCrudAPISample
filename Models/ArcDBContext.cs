@@ -15,6 +15,7 @@ namespace ArcCrudAPI.Models
         {
         }
 
+        public virtual DbSet<ArcItems> ArcItems { get; set; }
         public virtual DbSet<Item> Item { get; set; }
         public virtual DbSet<Post> Post { get; set; }
 
@@ -29,6 +30,18 @@ namespace ArcCrudAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ArcItems>(entity =>
+            {
+                entity.HasKey(e => e.ArcItemId)
+                    .HasName("PK__ArcItems__E885BF3C12AC16DD");
+
+                entity.Property(e => e.ArcItemId).HasColumnName("ArcItemID");
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.Property(e => e.ItemId).HasColumnName("ItemID");
